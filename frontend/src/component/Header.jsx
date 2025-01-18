@@ -1,9 +1,54 @@
 "use client";
 
 import React, { useState } from "react";
+import axios from "axios";
 
 const LoginModal = ({ isOpen, toggleModal }) => {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "", name: "" });
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage("");
+
+    try {
+      if (isRegistering) {
+        // Registration API Call
+        const response = await axios.post("/api/users", {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        });
+        setMessage("Registration successful! Please login.");
+        setIsRegistering(false);
+      } else {
+        // Login API Call
+        const response = await axios.post("/api/login", {
+          email: formData.email,
+          password: formData.password,
+        });
+        const { token } = response.data;
+
+        // Store the token for authentication
+        localStorage.setItem("authToken", token);
+        setMessage("Login successful!");
+        toggleModal();
+      }
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      setMessage("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -23,70 +68,55 @@ const LoginModal = ({ isOpen, toggleModal }) => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
               Create an Account
             </h2>
-            <p className="text-gray-600 text-sm mb-6 text-center">
-              Fill in the details to register for a new account.
-            </p>
-
-            <form>
+            <form onSubmit={handleFormSubmit}>
               <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name
                 </label>
                 <input
                   type="text"
                   id="name"
+                  name="name"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="mb-4">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
+                  name="password"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
-              </div>
-              <div className="mb-6">
-                <label className="flex items-center text-gray-600 text-sm">
-                  <input
-                    type="checkbox"
-                    className="mr-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-                  I agree to the{" "}
-                  <a href="#" className="text-blue-600 hover:underline ml-1">
-                    Terms and Conditions
-                  </a>
-                </label>
               </div>
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                disabled={isLoading}
               >
-                Register
+                {isLoading ? "Registering..." : "Register"}
               </button>
               <div className="text-center mt-4 text-sm text-gray-600">
                 Already have an account?{" "}
@@ -108,48 +138,42 @@ const LoginModal = ({ isOpen, toggleModal }) => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
               Welcome Back
             </h2>
-            <p className="text-gray-600 text-sm mb-6 text-center">
-              Login to access your account or register for a new one.
-            </p>
-
-            <form>
+            <form onSubmit={handleFormSubmit}>
               <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
-
               <div className="mb-4">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
+                  name="password"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
               </div>
-
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? "Logging in..." : "Login"}
               </button>
-
               <div className="text-center mt-4 text-sm text-gray-600">
                 Don’t have an account?{" "}
                 <a
@@ -166,6 +190,7 @@ const LoginModal = ({ isOpen, toggleModal }) => {
             </form>
           </>
         )}
+        {message && <p className="mt-4 text-center text-sm text-red-600">{message}</p>}
       </div>
     </div>
   );
@@ -173,21 +198,15 @@ const LoginModal = ({ isOpen, toggleModal }) => {
 
 const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleLoginModal = () => {
     setIsLoginModalOpen(!isLoginModalOpen);
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
     <header className="bg-white w-full shadow-md py-4 px-6 sm:px-10">
       <div className="flex items-center justify-between">
         <div className="text-2xl font-bold text-gray-800">MIT Marketplace</div>
-
         <nav className="hidden md:flex space-x-6">
           <a href="#" className="text-gray-600 hover:text-gray-800">
             Home
@@ -205,66 +224,17 @@ const Header = () => {
             Deals
           </a>
         </nav>
-
         <button
           onClick={toggleLoginModal}
-          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 hidden md:block"
+          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300"
         >
           Login
         </button>
-
-        <button
-          className="md:hidden text-gray-600 hover:text-gray-800 focus:outline-none"
-          onClick={toggleMobileMenu}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 6h16M4 12h16m-7 6h7"
-            />
-          </svg>
-        </button>
+        
       </div>
-
-      {isMobileMenuOpen && (
-        <div className="mt-4 md:hidden">
-          <nav className="flex flex-col space-y-2">
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              Home
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              Packages
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              Categories
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              Reviews
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              Deals
-            </a>
-          </nav>
-          <button
-            className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all duration-300"
-            onClick={toggleLoginModal}
-          >
-            Login
-          </button>
-        </div>
-      )}
-
       <LoginModal isOpen={isLoginModalOpen} toggleModal={toggleLoginModal} />
     </header>
   );
 };
 
-export default Header;
+export default Header;
