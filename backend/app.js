@@ -28,7 +28,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/categories', categoryRoutes);
 
 app.use( (req, res, next) => {
-    res.status(404).json({ message: "this api is not defined" });
+    res.status(404).json({ message: "this api is not defined you may hit wrong api" });
 });
 
 const PORT = process.env.PORT || 5000;
