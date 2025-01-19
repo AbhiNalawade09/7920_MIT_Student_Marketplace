@@ -38,7 +38,7 @@ const LoginModal = ({ isOpen, toggleModal, setIsAuthenticated }) => {
         // Store the token for authentication
         localStorage.setItem("authToken", token);
         setIsAuthenticated(true); // Update the parent state
-        setMessage("Login successful!");
+        // setTimeout(() => setMessage("Login successful!"), 3000);
         toggleModal();
       }
     } catch (error) {
