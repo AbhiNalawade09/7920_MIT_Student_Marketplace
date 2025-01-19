@@ -111,7 +111,7 @@ const ExclusiveDeals = () => {
             {/* Left Side Image */}
             <div className="w-1/2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-l-lg p-6 flex items-center justify-center">
               <img
-                src="https://via.placeholder.com/150"
+                src="https://img.freepik.com/free-vector/business-deal_52683-7196.jpg?t=st=1737229063~exp=1737232663~hmac=7724949bdc22d69dd125563d8c132c8d3de4816e2e2d43962fd8d50f16fa283b&w=826"
                 alt="Claim Deal"
                 className="rounded-lg shadow-lg"
               />
