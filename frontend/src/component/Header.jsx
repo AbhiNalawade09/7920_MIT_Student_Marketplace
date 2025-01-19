@@ -1,9 +1,7 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const LoginModal = ({ isOpen, toggleModal }) => {
+const LoginModal = ({ isOpen, toggleModal, setIsAuthenticated }) => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
   const [message, setMessage] = useState("");
@@ -31,7 +29,7 @@ const LoginModal = ({ isOpen, toggleModal }) => {
         setIsRegistering(false);
       } else {
         // Login API Call
-        const response = await axios.post("/api/login", {
+        const response = await axios.post("/api/users/login", {
           email: formData.email,
           password: formData.password,
         });
@@ -39,6 +37,7 @@ const LoginModal = ({ isOpen, toggleModal }) => {
 
         // Store the token for authentication
         localStorage.setItem("authToken", token);
+        setIsAuthenticated(true); // Update the parent state
         setMessage("Login successful!");
         toggleModal();
       }
@@ -198,10 +197,30 @@ const LoginModal = ({ isOpen, toggleModal }) => {
 
 const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("authToken")
+  );
 
   const toggleLoginModal = () => {
     setIsLoginModalOpen(!isLoginModalOpen);
   };
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        return alert("No token found. Please log in.");
+      }
+  
+      await axios.post(
+        "/api/users/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
   return (
     <header className="bg-white w-full shadow-md py-4 px-6 sm:px-10">
@@ -224,15 +243,27 @@ const Header = () => {
             Deals
           </a>
         </nav>
-        <button
-          onClick={toggleLoginModal}
-          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300"
-        >
-          Login
-        </button>
-        
+        {isAuthenticated ? (
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-all duration-300"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={toggleLoginModal}
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300"
+          >
+            Login
+          </button>
+        )}
       </div>
-      <LoginModal isOpen={isLoginModalOpen} toggleModal={toggleLoginModal} />
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        toggleModal={toggleLoginModal}
+        setIsAuthenticated={setIsAuthenticated}
+      />
     </header>
   );
 };
