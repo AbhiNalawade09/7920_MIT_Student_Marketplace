@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 // import faqImage from "../../public/faq-vector.png"; // Replace with your vector image path
-// import {faqImage} from "../assets/faq-vector.png"
+import faqImage from "./faq-vector.png"
+
 
 
 const FAQ = () => {
@@ -49,7 +50,9 @@ const FAQ = () => {
          
          
         <div className="flex items-center justify-center">
-        <img src="../../public/faq-vector.png" alt="Image" className="w-full h-auto"/>  
+        {/* <img src="https://img.lovepik.com/png/20231009/Hand-drawn-cartoon-faq-business-plant-illustration-dai-social_136911_wh300.png" alt="Image" className="w-full h-auto"/>   */}
+
+        <img src={faqImage}  alt="faq image" />
         </div>
 
         {/* Right Side - FAQs */}
