@@ -221,6 +221,17 @@ const Header = () => {
           },
         }
       );
+  
+      // Clear client-side storage and update state
+      localStorage.removeItem("authToken");
+      setIsAuthenticated(false);
+      alert("Logged out successfully.");
+    } catch (error) {
+      console.error("Logout failed:", error.response?.data || error.message);
+      alert("Failed to log out. Please try again.");
+    }
+  };
+  
 
   return (
     <header className="bg-white w-full shadow-md py-4 px-6 sm:px-10">
