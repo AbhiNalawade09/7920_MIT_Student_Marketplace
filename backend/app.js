@@ -16,7 +16,10 @@ connectDB();
 
 app.use(express.json());
 app.use(cors());
-
+app.use(cors({
+    origin: 'https://7920-mit-student-marketplace.vercel.app/', // Replace with your frontend's Render URL
+    credentials: true
+  }));
 // Routes
 app.get('/', (req, res) => {
     res.send('API is running...');
