@@ -1,0 +1,60 @@
+/* Blob Cursor Styling */
+.blob-cursor {
+    position: fixed;
+    width: 45px; /* Adjust the blob size */
+    height: 45px;
+    background: linear-gradient(135deg, #4f46e5, #9333ea); /* Gradient color */
+    border-radius: 50%; /* Circular shape */
+    pointer-events: none; /* No interaction with the blob */
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  
+    /* Animation for smooth morphing */
+    animation: blobAnimation 3s infinite ease-in-out;
+    transition: transform 0.1s ease-out;
+  }
+  
+  /* Blob Morphing Animation */
+  @keyframes blobAnimation {
+    0% {
+      border-radius: 50% 50% 40% 60%;
+    }
+    25% {
+      border-radius: 60% 40% 60% 40%;
+    }
+    50% {
+      border-radius: 50% 50% 50% 50%;
+    }
+    75% {
+      border-radius: 40% 60% 50% 50%;
+    }
+    100% {
+      border-radius: 50% 50% 40% 60%;
+    }
+  }
+
+
+
+
+  /* curser  */
+
+  /* Animating Words */
+.animated-word {
+    display: inline-block;
+    opacity: 0;
+    animation: wordAnimation 1s forwards;
+    transform: translateX(-10px);
+    animation-delay: 0.1s;
+  }
+  
+  @keyframes wordAnimation {
+    0% {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  

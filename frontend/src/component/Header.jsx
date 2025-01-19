@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../pages/Cursor.css"
 
 const LoginModal = ({ isOpen, toggleModal, setIsAuthenticated }) => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -236,7 +237,28 @@ const Header = () => {
   return (
     <header className="bg-white w-full shadow-md py-4 px-6 sm:px-10">
       <div className="flex items-center justify-between">
-        <div className="text-2xl font-bold text-gray-800">MIT Marketplace</div>
+
+        {/* <div className="text-2xl font-bold text-gray-800">MIT Marketplace</div> */}
+
+        <div className="text-2xl font-bold text-gray-800">
+        <span className="animated-word">M</span>
+        <span className="animated-word">I</span>
+        <span className="animated-word">T</span>
+        <span className="animated-word"> &nbsp; </span>
+        <span className="animated-word">M</span>
+        <span className="animated-word">a</span>
+        <span className="animated-word">r</span>
+        <span className="animated-word">K</span>
+        <span className="animated-word">e</span>
+        <span className="animated-word">t</span>
+        <span className="animated-word">p</span>
+        <span className="animated-word">l</span>
+        <span className="animated-word">a</span>
+        <span className="animated-word">c</span>
+        <span className="animated-word">e</span>
+      </div>
+
+
         <nav className="hidden md:flex space-x-6">
           <a href="#" className="text-gray-600 hover:text-gray-800">
             Home
@@ -280,3 +302,4 @@ const Header = () => {
 };
 
 export default Header;
+
