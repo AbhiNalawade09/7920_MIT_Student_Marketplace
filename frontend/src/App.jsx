@@ -13,9 +13,12 @@ import FAQ from './pages/Faq'
 
 
 
+import Cursor from './pages/Cursor'
+
 function App() {
  return (
 <>
+<Cursor/>
  <Header/>
  <HeroSection/>
 <Featured/>
