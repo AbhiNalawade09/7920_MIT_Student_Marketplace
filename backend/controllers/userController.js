@@ -53,12 +53,13 @@ export const loginUser = async (req, res) => {
 export const logoutUser = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
+    console.log(token);
     if (!token) {
       return res.status(400).json({ error: "No token provided." });
     }
 
     // Blacklist the token
-    blacklistToken(token);
+    // blacklistToken(token);
 
     res.status(200).json({ message: "Logged out successfully." });
   } catch (err) {
